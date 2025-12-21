@@ -12,16 +12,23 @@ from sklearn.feature_extraction import text
 import json
 
 # Load spaCy model
+
 import spacy
-import subprocess
-import sys
 import streamlit as st
 
 @st.cache_resource
 def load_nlp_model():
-    return spacy.load("en_core_web_sm")
+    try:
+        # Try loading full model (works locally)
+        return spacy.load("en_core_web_sm")
+    except Exception:
+        # Fallback for Streamlit Cloud / Python 3.13
+        nlp = spacy.blank("en")
+        nlp.add_pipe("sentencizer")
+        return nlp
 
 nlp = load_nlp_model()
+
 
 
 

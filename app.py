@@ -1,6 +1,6 @@
 import streamlit as st
 import tempfile
-import PyPDF2
+import pdfplumber
 import docx2txt
 import spacy
 import os
@@ -28,27 +28,34 @@ keyword_tips = load_tips()
 
 def extract_text(file):
     text = ""
-    if file.name.endswith(".pdf"):
+
+    if file.name.lower().endswith(".pdf"):
         try:
-            reader = PyPDF2.PdfReader(file)
-            text = "".join([page.extract_text() or "" for page in reader.pages])
+            with pdfplumber.open(file) as pdf:
+                for page in pdf.pages:
+                    text += page.extract_text() or ""
         except Exception as e:
             st.error(f"PDF parsing error: {e}")
-    elif file.name.endswith(".docx"):
+
+    elif file.name.lower().endswith(".docx"):
+        tmp_path = None
         try:
             with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp:
                 file.seek(0)
                 tmp.write(file.read())
                 tmp_path = tmp.name
+
             text = docx2txt.process(tmp_path)
+
         except Exception as e:
             st.error(f"DOCX parsing error: {e}")
+
         finally:
-            try:
+            if tmp_path and os.path.exists(tmp_path):
                 os.unlink(tmp_path)
-            except:
-                pass
+
     return text
+
 
 def score_resume(resume_text, jd_text):
     vectorizer = TfidfVectorizer()

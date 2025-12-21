@@ -1,0 +1,741 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{longtable,booktabs,array}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{newtxtext,newtxmath} % Professional Times New Roman replacement
+\usepackage[table]{xcolor} % For grayscale table shading
+\usepackage{float} % Better figure placement
+\usepackage{fancyhdr} % For headers and footers
+\usepackage{times} % Times New Roman font
+\usepackage{lipsum} % For dummy text, can be removed
+\usepackage[absolute]{textpos} % For page border
+\usepackage{tikz} % For drawing the border
+\usepackage{eso-pic} % For adding the border to every page
+\usepackage{listings}
+\usepackage{xcolor}
+% Set all text to black
+\renewcommand{\color}[1]{}
+\definecolor{black}{rgb}{0,0,0}
+\color{black}
+\usepackage{tikz}
+\usepackage{background}
+
+\backgroundsetup{
+  scale=1,
+  angle=0,
+  opacity=1,
+  contents={%
+    \begin{tikzpicture}[remember picture, overlay]
+      \draw[line width=3pt,color=black]
+        ([xshift=24pt, yshift=24pt]current page.south west) rectangle
+        ([xshift=-24pt, yshift=-24pt]current page.north east);
+    \end{tikzpicture}
+  }
+}
+
+
+% Page border setup
+\AddToShipoutPicture{%
+    \AtPageLowerLeft{%
+        \begin{tikzpicture}[overlay,remember picture]
+            \draw[line width=1pt] % Adjust border thickness here
+                ($(current page.north west)+(0.25in,-0.25in)$) --
+                ($(current page.north east)+(-0.25in,-0.25in)$) --
+                ($(current page.south east)+(-0.25in,0.25in)$) --
+                ($(current page.south west)+(0.25in,0.25in)$) --
+                cycle;
+        \end{tikzpicture}
+    }%
+}
+
+% Section formatting - professional black headers
+\titleformat{\section}
+  {\normalfont\Large\bfseries\filcenter}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+  
+% List formatting
+\setlist[itemize]{noitemsep, topsep=2pt, leftmargin=*}
+\setlist[enumerate]{noitemsep, topsep=3pt, leftmargin=*}
+
+% Table formatting
+\renewcommand{\arraystretch}{1.2}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\definecolor{lightgray}{gray}{0.92} % Light gray for table headers
+
+% Set counter for section numbering
+\setcounter{secnumdepth}{3}
+
+% Remove section numbering
+\setcounter{secnumdepth}{-\maxdimen}
+
+% Improve figure placement
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{6}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+
+% Set hyperlink style
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=black,
+  citecolor=black,
+  pdfborder={0 0 0}
+}
+
+% Custom commands
+\newcommand{\sectiontitle}[1]{\vspace*{-0.5\baselineskip}\section*{#1}}
+\newcommand{\subsectiontitle}[1]{\vspace*{-0.25\baselineskip}\subsection*{#1}}
+
+% Remove date and author
+\author{}
+\date{}
+
+% Set up headers and footers
+% Set up headers and footers
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+\fancyhead[R]{\small \fontfamily{ptm}\selectfont AI Based Resume Analyser}
+\fancyfoot[L]{\small \fontfamily{ptm}\selectfont YSPM'S, YTC, FOE, Computer Science And Engineering, Satara}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\begin{document}
+
+% Front matter
+\pagenumbering{roman}
+\clearpage
+
+% Main content
+\pagenumbering{arabic}
+
+\sectiontitle{ACKNOWLEDGEMENT}
+\vspace{1.5cm}
+\label{acknowledgement}
+\hspace*{1.5em} This is to acknowledge and thank all the individuals who played a defining role in shaping this mini-project report. Without their constant support, guidance, and assistance this mini-project report would not have been completed alone. \\
+\hspace*{1.5em} We take this opportunity to express our sincere thanks to my guide Ms. T. B. Lokhande for her guidance, support, encouragement and advice. We will forever remain grateful for the constant support and guidance extended by our Guide, in making this mini-project work.\\ 
+\hspace*{1.5em}We wish to express our sincere thanks to, Dr. S. V. Balshetwar (Head, Department of  Computer Science and Engineering) at YSPM’S YTC, Satara. We would also like to express our deep gratitude to our Hon’ble Principal Dr. Vikram Patil who provides good opportunities for all of us. 
+Last but not least, we would like to thank all our Friends and Family members who have always been there to support and help us to complete this mini-project work in time. \\
+ \newpage
+ \sectiontitle{ABSTRACT}
+\label{abstract}
+
+\vspace{0.5cm}
+In today's competitive job market, aligning one's resume with a specific job description (JD) significantly enhances the chances of being shortlisted by recruiters and automated Applicant Tracking Systems (ATS). This project presents a web-based application developed using Streamlit, which evaluates the relevance of a resume against a given job description and offers personalized suggestions for improvement.\\
+The system accepts resumes in PDF or DOCX formats and extracts their textual content using parsing libraries such as PyPDF2 and docx2txt. A job description is provided as text input. Using Natural Language Processing (NLP) techniques powered by spaCy, the application processes both documents to identify lemmatized keyword tokens. A TF-IDF vectorizer is employed to compute the cosine similarity between the resume and the JD, generating a match score expressed as a percentage.\\
+Furthermore, the system identifies missing but important keywords from the JD that are not present in the resume and categorizes them into relevant groups such as skills, tools, and project terminology. It also utilizes an external JSON-based tip repository to provide contextual improvement suggestions for each missing keyword. All evaluations are logged locally in a CSV file for tracking progress.\\
+This application serves as a practical tool for job seekers to optimize their resumes by aligning them more closely with job-specific requirements, thereby improving their chances of selection.\\
+\newpage
+\sectiontitle{LIST OF Figures}
+\label{list-of-tables}
+
+
+
+
+\begin{center}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{9cm}|>{\centering\arraybackslash}p{2cm}|}
+\hline
+\textbf{Figure} & \textbf{Title} & \textbf{Page No.} \\
+\hline
+3.2.1   & Flow Chart                    &                \\
+\hline
+3.3.1   & Sequence diagram              &                \\
+\hline
+3.8.1   & Use Case Diagram              &                \\
+\hline
+ 6.1    & User Input for Resume and Job Description                  &                \\
+ \hline
+   6.2& Successful Upload of Resume and Job Description                &                \\
+   \hline
+   6.3&Resume Match Score, Suggestions and Improvement Guidance             &                \\
+   
+\hline
+\end{longtable}
+\end{center}
+
+
+
+
+\newpage
+\sectiontitle{ABBREVIATIONS}
+\label{abbreviations}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{0.25\linewidth}|p{0.7\linewidth}|}
+\hline
+\textbf{Abbreviation} & \textbf{Full Form} \\ \hline
+
+NLP  & Natural Language Processing \\ \hline
+TF-IDF & Term Frequency–Inverse Document Frequency\\ \hline
+JD & Job Description\\ \hline
+
+
+\end{tabular}
+\end{table}
+
+\newpage
+\section{Chapter 1: INTRODUCTION}
+
+\subsection{1.1 Background and Motivation}
+\hspace{1.5em}In today’s competitive job market, the number of applications received for each job vacancy has significantly increased. Manually reviewing hundreds or thousands of resumes to find a suitable candidate is both time-consuming and inefficient. Recruiters face difficulty in identifying the most qualified candidates from large applicant pools. As a result, automation of resume screening has become a necessity. Leveraging Natural Language Processing (NLP), a resume analyzer can streamline this process by evaluating resumes against job descriptions with speed and precision.
+\subsection{1.2 Problem Statement}
+
+\hspace{1.5em}Recruiters and HR professionals often spend countless hours reviewing resumes manually. Traditional keyword-based methods used in Applicant Tracking Systems (ATS) fail to assess the true relevance of a candidate’s qualifications, skills, and experience. They often overlook the semantic meaning of the content and do not provide constructive feedback to job seekers. There is a need for a smart system that can evaluate resumes efficiently, compare them with job requirements, and provide meaningful suggestions for improvement.
+
+\subsection{1.3	Importance of Resume Analyzer}
+A resume analyzer plays a vital role in improving recruitment efficiency. It helps employers:
+\begin{itemize}
+    \item Quickly filter out unqualified candidates.
+    \item 	Focus on applicants who closely match the job criteria.
+    \item 	Reduce hiring costs and time-to-hire.
+    \item 	It also benefits job seekers by Providing feedback to improve their resumes.
+    \item 	Enhancing their chances of selection by aligning resumes with job expectations.
+\end{itemize}
+
+\subsection{1.4 The Role of Natural Language Processing (NLP) in Resume Analyzer}
+
+\hspace{1.5em}Natural Language Processing (NLP) forms the foundation of the resume analyzer. It allows the system to understand, interpret, and manipulate human language in a meaningful way. NLP enables the analyzer to:
+    \begin{itemize}
+        \item Extract important entities like skills, education, and experience.
+        \item Normalize textual data through tokenization and lemmatization.
+        \item Compare resumes and job descriptions based on semantic similarity.
+    \end{itemize}\\
+
+By using techniques such as TF-IDF, cosine similarity, and Named Entity Recognition (NER), NLP makes it possible to automate complex analyses that previously required human judgment.
+
+\subsection{1.5 Challenges in Resume Analyzer}
+
+\hspace{1.5em}Despite the benefits, developing an effective resume analyzer involves several challenges:
+\begin{itemize}
+    \item Diversity in resume formats and writing styles.
+    \item Ambiguity in job descriptions.
+    \item Lack of standard datasets for evaluation.
+    \item Evaluating both hard skills and soft skills.
+    \item Maintaining fairness and avoiding bias in relevance scoring.
+    \item 
+\end{itemize}
+\subsection{1.6 Scope of the Project}
+
+\hspace{1.5em}This project focuses on building a prototype of a resume analyzer using NLP techniques. It will:
+\begin{itemize}
+    \item Parse resumes and job descriptions.
+    \item Extract and preprocess relevant content.
+    \item Perform semantic similarity comparison.
+    \item Provide match scores and improvement suggestions.
+\end{itemize}\\
+
+\hspace{1.5em}The scope is limited to English-language resumes and job descriptions, and does not currently handle graphical resumes or multi-language support. However, the modular design allows for future enhancements in these areas.
+\newpage
+\section{CHAPTER 2: LITERATURE SURVEY}  
+Below is a detailed review of 10 relevant research papers in the domain of resume analysis and related NLP techniques. Each review includes the title, author(s), publisher, year of publication, three key findings, and three limitations. 
+ \begin{enumerate}
+   
+\item \textbf{Title: A Rule-Based System for Resume Classification}\\
+Author(s): A. Gupta, R. Singh\\
+Publisher: International Journal of Computer Applications\\
+Year: 2016\\
+Key Findings:
+  \begin{itemize}
+      \item Uses rule-based logic for efficient resume classification.
+      \item Identifies key sections like skills and experience.
+      \item Improves filtering accuracy compared to manual review.
+  \end{itemize}
+       
+Limitations:
+  \begin{itemize}
+      \item Lacks adaptability to modern resume styles.
+      \item Not scalable for large datasets.
+      \item Fails to understand semantic context.
+  \end{itemize}
+Research Gap: Focused on rule-based filtering; lacks semantic similarity assessment using NLP.\\
+\textbf{
+\item Title: Resume Ranking System Using Natural Language Processing}
+
+Author(s): Y. Sharma, A. Srivastava, S. Arora\\
+Publisher: IRJET\\
+Year: 2021\\
+Key Findings:
+  \begin{itemize}
+      \item Applies NLP to extract relevant resume data.
+      \item Ranks resumes using text similarity.
+      \item Highlights key sections based on job descriptions.
+  \end{itemize}
+Limitations:
+  \begin{itemize}
+      \item Struggles with unstructured resume formats.
+      \item Limited domain applicability.
+      \item Lacks user-focused feedback.
+  \end{itemize}
+Research Gap: No dynamic feedback provided to improve resumes.\\
+\\
+\\
+\textbf{
+\item Title: Text Mining Approaches for Resume Classification}
+
+Author(s): N. Dey, S. Samanta, M. Ashour\\
+Publisher: Springer\\
+Year: 2018\\
+Key Findings:
+\begin{itemize}
+    \item Reviews multiple NLP-based classification techniques.
+    \item Evaluates linguistic and keyword-based filters.
+    \item Compares performance across datasets.
+\end{itemize}
+ Limitations:
+   \begin{itemize}
+       \item Misses contextual matching with job descriptions.
+       \item Dataset size limits generalizability.
+       \item Not optimized for real-time use.
+   \end{itemize}
+Research Gap: Does not support custom job description alignment.\\
+\textbf{
+\item Title: ResumeParser: Information Extraction from Unstructured Resumes
+}
+Author(s): J. Wang, K. Singh\\
+Publisher: ACM Digital Library\\
+Year: 2019\\
+Key Findings:
+   \begin{itemize}
+       \item Extracts structured data from messy resume formats.
+       \item Uses NER for identifying names and skills.
+       \item Enables better indexing in ATS systems.
+   \end{itemize}
+Limitations:
+  \begin{itemize}
+      \item Doesn’t compare resumes with job roles.
+      \item Doesn’t generate match scores.
+      \item Limited feedback to users.
+  \end{itemize}
+Research Gap: Lacks relevance scoring; only focuses on extraction.\\
+\textbf{
+\item Title: Job Matching with Deep Learning
+}
+Author(s): M. Lee, Y. Chen\\
+Publisher: IEEE Access\\
+Year: 2022\\
+Key Findings:
+  \begin{itemize}
+      \item Uses neural networks for job-resume matching.
+      \item Learns latent features from large datasets.
+      \item Performs better than traditional ML methods.
+  \end{itemize}
+Limitations:
+  \begin{itemize}
+      \item Computationally expensive.
+      \item Needs large labeled datasets.
+      \item Difficult to interpret predictions.
+  \end{itemize}
+Research Gap: Too focused on deep learning; not feasible for lightweight solutions using NLP.\\
+\textbf{
+\item Title: Intelligent Resume Analyzer Using Text Similarity
+}
+Author(s): P. Raj, K. Thomas\\
+Publisher: IJIRCCE\\
+Year: 2020\\
+Key Findings:
+  \begin{itemize}
+      \item Uses cosine similarity for matching.
+      \item Focuses on text-based feature vectors.
+      \item Highlights gap areas in resumes.
+  \end{itemize}
+Limitations:
+  \begin{itemize}
+      \item Narrow domain focus.
+      \item Doesn’t consider resume structure.
+      \item Low adaptability to job diversity.
+  \end{itemize}
+Research Gap: Limited to specific job domains; lacks generalizability.\\
+\textbf{
+\item Title: Semantic-Based Resume Scanning
+}
+Author(s): H. Kumar, A. Banerjee\\
+Publisher: IJCSMC\\
+Year: 2017\\
+Key Findings:
+  \begin{itemize}
+      \item Uses semantic similarity for matching.
+      \item Integrates ontologies in parsing.
+      \item Attempts contextual analysis.
+  \end{itemize}
+Limitations:
+  \begin{itemize}
+      \item No user interface feedback.
+      \item Doesn’t support multi-language resumes.
+      \item Lacks integration with ATS tools.
+  \end{itemize}
+Research Gap: Lacks user interface and actionable feedback.\\
+\textbf{
+\item Title: Named Entity Recognition for Resume Screening}
+
+Author(s): T. Ahmed, S. Roy\\
+Publisher: Elsevier\\
+Year: 2019\\
+Key Findings:
+  \begin{itemize}
+      \item Identifies entities like names and organizations.
+      \item Improves candidate classification.
+      \item Integrates with other NLP modules.
+  \end{itemize}
+Limitations:
+  \begin{itemize}
+      \item Doesn’t compute match scores.
+      \item Limited entity categories.
+      \item Poor performance on complex resumes.
+  \end{itemize}
+Research Gap: Does not evaluate resume-to-job match score.\\
+    \textbf{
+\item Title: Machine Learning Based Resume Filtering}
+
+Author(s): V. Patel, S. Deshmukh\\
+Publisher: JETIR\\
+Year: 2021\\
+Key Findings:
+  \begin{itemize}
+      \item Uses SVM and decision trees.
+      \item Shows high filtering accuracy.
+      \item Reduces recruiter workload.
+  \end{itemize}
+Limitations:
+  \begin{itemize}
+      \item Requires frequent retraining.
+      \item Doesn’t give improvement suggestions.
+      \item Biased toward structured formats.
+  \end{itemize}
+Research Gap: Heavy reliance on ML algorithms with no real-time feedback.\\
+\textbf{
+\item Title: Candidate Selection System using NLP
+}
+\end{enumerate} 
+Author(s): D. Reddy, A. Mehta\\
+Publisher: IJSER\\
+Year: 2020\\
+Key Findings:
+  \begin{itemize}
+      \item Parses resumes using NLP.
+      \item Extracts relevant keywords.
+      \item Simplifies HR decision-making.
+  \end{itemize}
+Limitations:
+  \begin{itemize}
+      \item Lacks scoring logic.
+      \item Poor handling of visual resumes.
+      \item No support for feedback loops.
+  \end{itemize}
+Research Gap: Structural inconsistencies in resumes reduce performance; lacks scoring precision.\\
+\newpage
+\section{CHAPTER 3:SYSTEM DESIGN}  
+\begin{enumerate}
+    \item 
+	Input Module\\
+Allows the user to:
+    \begin{itemize}
+        \item Upload resume file (.pdf/.docx)
+        \item Paste job description in a text box
+    \end{itemize}
+\item Text Extraction Module 
+Extracts plain text from uploaded resume using: 
+	\begin{itemize}
+	    \item PyPDF2 for PDF 
+	\item docx2txt for Word files
+        \end{itemize}
+
+\end{enumerate}
+
+\newpage
+\section{CHAPTER 4: METHODOLOGY }
+
+This project presents an AI-based Resume and Job Description Matcher developed using Natural Language Processing (NLP) techniques. The methodology follows a step-by-step pipeline from input handling to resume evaluation and suggestion generation. Below is the detailed explanation:
+
+1.	Input Collection
+•	Resume Upload: Users can upload resumes in PDF or DOCX format.
+•	Job Description Input: A text area allows users to paste the job description directly into the app     interface.
+2.	Text Extraction
+•	Resumes are parsed using:
+•	PyPDF2 for .pdf files.
+•	docx2txt for .docx files.
+•	Extracted text is cleaned and consolidated into plain text for further processing.
+3.	Text Preprocessing and Vectorization
+•	Both resume and job description texts are tokenized and converted into lowercase.
+•	TF-IDF (Term Frequency-Inverse Document Frequency) is used to vectorize the texts.
+•	This transforms textual data into numerical representations suitable for similarity analysis.
+4.	Similarity Scoring
+•	The similarity between the resume and job description is calculated using cosine similarity.
+•	The resulting match percentage is categorized into:
+                 Excellent Match (> 80%)
+              ✅ Good Match (60–80%)	
+    ⚠️ Fair Match (40–60%)
+    ❌ Weak Match (< 40%)
+5.	NLP-Based Keyword Analysis
+•	spaCy is used for lemmatization and tokenization.
+•	Relevant lemmatized keywords from the job description are extracted.
+•	A comparison is performed to find missing important keywords in the resume.
+6.	Improvement Suggestions
+•	Missing keywords are categorized into:
+•	Skills (e.g., Python, SQL)
+•	Tools/Technologies (e.g., GitHub, Docker)
+•	Project Topics (e.g., analysis, dashboard)
+•	Other (e.g., general job-related terms)
+•	Up to 10 relevant missing keywords are displayed for the user to consider including.
+7.	Personalized Tips
+•	A JSON file (tips.json) provides tailored improvement tips for specific keywords.
+•	Relevant tips are shown for each missing keyword to help users effectively enhance their resumes.
+8.	Logging
+Each analysis entry, including timestamp, score, and missing keywords, is logged into evaluation_log.csv for future reference and tracking.  
+
+
+
+
+
+
+
+\newpage
+
+   \section{CHAPTER 5: REQUIREMENTS ANALYSIS }
+
+1.	Functional Requirements
+These define what the system should do:
+1.1 Resume Upload
+•	The system must allow users to upload resumes in .pdf or .docx format.
+•	It should support files up to 200MB in size.
+1.2 Job Description Input
+•	Users must be able to paste job descriptions as plain text.
+1.3 Text Extraction
+•	The system must extract textual content from PDF and DOCX files using:
+•	PyPDF2 for PDF parsing.
+•	docx2txt for DOCX parsing.
+1.4 Resume-JD Similarity Scoring
+•	Convert both resume and JD text to vector format using TF-IDF.
+•	Calculate similarity using cosine similarity.
+•	Display a match percentage.
+1.5 Keyword Analysis and Suggestions
+•	Use spaCy to tokenize and lemmatize text.
+•	Identify missing keywords in the resume compared to the job description.
+•	Categorize missing keywords into:
+•	Skills
+•	Tools/Technologies
+•	Projects
+1.6	Display Personalized Tips
+•	Fetch improvement tips from tips.json.
+•	Display tips related to missing or underrepresented keywords.
+1.7 Logging
+•	Log match percentage, keywords, and timestamp into evaluation_log.csv.
+
+2.	Non-Functional Requirements
+These define how the system performs tasks:
+2.1 Performance
+•	Response time for text processing and scoring should be under 5 seconds for standard resume lengths.
+2.2 Usability
+•	The UI should be simple, responsive, and require no technical background.
+•	Use Streamlit for easy deployment and clean interface.
+2.3 Portability
+•	The system should be easily deployable on local machines or cloud using Python environment.
+2.4 Scalability
+•	The logic should support future integration with databases or APIs to expand functionality (e.g., saving user profiles).
+2.5 Security
+•	Uploaded files should be processed in-memory or temporary files and deleted immediately after processing.
+•	No personal data is permanently stored.
+ Software and Tools
+                    Component	          Tool/Library Used
+Web Interface	Streamlit
+NLP	spaCy (en_core_web_sm)
+Text Vectorization	Scikit-learn TF-IDF
+Similarity Score	Scikit-learn Cosine Similarity
+Resume Parsing	PyPDF2, docx2txt
+File Handling	tempfile, os
+Tips Storage	JSON (tips.json)
+Logging	pandas (CSV format)
+
+
+
+
+
+ 
+ \newpage
+\section{CHAPTER 6: RESULT}
+
+
+ 
+ 
+ 
+
+
+
+
+
+
+ \newpage
+ 
+\section{CHAPTER 7: Future Scope And Conclusion }                                     
+   \subsection{   7.1 Future Scope  }
+The current implementation of the Resume-JD Matcher provides a robust foundation for resume evaluation using Natural Language Processing (NLP). However, there is considerable scope for enhancements and expansion to improve functionality, scalability, and user experience. Below are the key directions for future development:
+•	Advanced NLP Techniques
+NER (Named Entity Recognition): Identify and categorize entities like qualifications, organizations, dates, and roles.
+Dependency Parsing & Sentence Structure Analysis: Better understanding of job responsibilities and contextual alignment.
+•	Machine Learning-Based Matching
+Replace cosine similarity with supervised learning models trained on labeled resume-job description pairs.
+Use classification models to predict match scores or recommend top candidate profiles.
+•	Support for Multiple Languages
+Extend functionality to support resumes and job descriptions in regional or global languages using multilingual NLP models (like spaCy’s xx_ent_wiki_sm or Hugging Face models).
+•	ATS Optimization Feedback
+Provide feedback based on Applicant Tracking System (ATS) compliance:
+           Keyword density
+     Section headers
+     Readability score
+          Format checks
+•	Interactive Resume Builder
+Build a dynamic module to recommend and insert missing keywords directly into the resume text.
+Allow users to download an optimized resume after suggestions are applied.
+•	Integration with Job Portals or APIs
+Automatically fetch job descriptions from LinkedIn, Indeed, or other platforms.
+Allow real-time matching with multiple job openings.
+•	User Profile and History Tracking
+Enable login functionality for users to:
+Track historical match scores.
+Maintain multiple resumes for different job roles.
+Store and manage improvement tips.
+•	Dashboard for Recruiters
+Design a separate interface for HR/recruiters to:
+Upload multiple resumes.
+Rank applicants based on job fit.
+Filter candidates using custom scoring criteria.
+•	Integration with Chatbots or Career Assistants
+Use conversational AI to guide users through resume improvement.
+\subsection{7.2 Conclusion}
+
+The Resume and Job Description Matcher is an effective tool that leverages Natural Language Processing (NLP) and similarity analysis to bridge the gap between job seekers' resumes and recruiters' expectations. By analyzing the textual content of resumes and job descriptions, the system provides:
+A quantitative match score that reflects alignment with job requirements.
+Actionable suggestions based on missing keywords categorized into skills, tools, project-related terms, and others.
+Personalized improvement tips sourced from a predefined knowledge base.
+This application simplifies the process of resume optimization, enabling users to tailor their resumes to specific job roles more effectively. The use of NLP techniques like lemmatization, tokenization, and TF-IDF vectorization ensures accurate and meaningful keyword matching.
+Additionally, the user-friendly interface built with Streamlit enhances accessibility, making the system suitable for both technical and non-technical users.
+In summary, the tool offers a practical, scalable, and intelligent solution for improving job application outcomes and serves as a valuable step toward more personalized career support systems.
+
+
+
+\newpage
+\section{APPENDIX } 
+Programming code: \\
+import streamlit as st \\
+import tempfile \\
+import PyPDF2 \\
+import docx2txt\\ 
+import spacy \\
+import os \\
+import pandas as pd\\ 
+from datetime import datetime 
+from sklearn.feature_extraction.text import TfidfVectorizer from\\ sklearn.metrics.pairwise import cosine_similarity \\
+# Load spaCy model for suggestions nlp = spacy.load("en_core_web_sm")\\ 
+# Generalized improvement suggestions import json \\
+# Load keyword tips from external JSON file \\
+with open("tips.json", "r") as f: \\
+keyword_tips = json.load(f) \\
+def extract_text(file): \\
+    text = ""     \\
+if file.name.endswith(".pdf"):\\ 
+        try: \\
+            reader = PyPDF2.PdfReader(file)  \\         
+            text = "".join([page.extract_text() or "" for page in\\ reader.pages])         except Exception as e: \\
+            st.error(f"PDF parsing error: {e}")     elif file.name.endswith(".docx"): 
+        try: \\
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp: 
+                file.seek(0)  \\                            tmp.write(file.read())  \\               
+tmp_path = tmp.name\\           
+  text = docx2txt.process(tmp_path)         except Exception as e: \\
+            st.error(f"DOCX parsing error: {e}") \\
+return text \\
+def score_resume(resume_text,jd_text): \\
+    vectorizer = TfidfVectorizer()     \\
+    vectors = vectorizer.fit_transform([resume_text, jd_text])     score = cosine_similarity(vectors[0], vectors[1])[0][0]     return round(score *   100, 2)  # Convert to percentage \\
+def suggest_improvements(resume_text, jd_text):\\ 
+ resume_doc = nlp(resume_text)\\    
+ jd_doc = nlp(jd_text) \\
+    resume_tokens = {token.lemma_.lower() for token in resume_doc if token.is_alpha and not token.is_stop} \\
+    jd_tokens = {token.lemma_.lower() for token in jd_doc if token.is_alpha\\ and not token.is_stop}    \\
+ missing_keywords = jd_tokens - resume_tokens \\
+    suggestions = sorted([word for word in missing_keywords if len(word) > 3])\\[:10]  # top 10 missing     
+return suggestions \\
+def categorize_keywords(keywords):\\ 
+    skills = {"python", "sql", "excel", "tableau", "powerbi", "ml", "data", "statistics"} \\
+tools = {"jira", "github", "snowflake", "docker", "tensorflow"} \\    
+project_keywords = {"analysis", "prediction", "dashboard", "model", "report",\\ "pipeline"}     categorized = {"skills": [], "tools": [], "projects": [], "other": []}    \\
+ for word in keywords:   \\    
+  if word in skills: \\
+            categorized["skills"].append(word)         elif word in tools:\\ 
+            categorized["tools"].append(word)         elif word in \\project_keywords: 
+            categorized["projects"].append(word) \\
+        else: \\
+            categorized["other"].append(word)     return categorized \\
+st.title(" Resume & JD Matcher") st.markdown(""" \\
+Upload your *resume* and *job description* below to get a match score and \\personalized improvement suggestions. 
+""")\\ 
+st.header(" Upload Resume")\\
+ st.caption("Accepted formats: PDF, DOCX | Max size: 200MB")\\ 
+resume_file = st.file_uploader("", type=["pdf", "docx"]) st.header(" Paste \\Job Description") \\
+jd_input = st.text_area("Paste the job description here") \\
+if resume_file and jd_input: \\
+    st.success(" Resume and Job Description uploaded!")     
+if st.button(" Analyze Resume"): 
+        resume_text = extract_text(resume_file) 
+        if not resume_text.strip(): 
+            st.error(" Could not extract text from resume. Please try another file.") 
+        else: 
+            score = score_resume(resume_text, jd_input)             suggestions = suggest_improvements(resume_text, jd_input)             categories = categorize_keywords(suggestions)             st.subheader(" Resume Match Score")            
+ st.metric("Match %", f"{score}%") 
+            st.subheader(" Suggestions to Improve")             if any(categories.values()):                
+ if categories["skills"]: 
+                    st.info("*Skills to Add:* " + ", ".join(categories["skills"]))                 if categories["tools"]: 
+                    st.info("*Tools/Technologies to Mention:* " + ", ".join(categories["tools"]))                 if categories["projects"]: 
+                    st.info("*Suggested Project Topics:* " + ", ".join(categories["projects"]))                 if categories["other"]: 
+                    st.info("*Other Relevant Terms:* " + ", ".join(categories["other"])) 
+            else: 
+                st.success(" Your resume already covers most relevant keywords!")           
+ st.subheader(" Improvement Guidance") 
+            tips = [] 
+            for word in categories["skills"] + categories["tools"] + categories["projects"] + categories["other"]:               
+  if word in keyword_tips: 
+                    tips.append(keyword_tips[word]) 
+         if tips:                
+ for tip in tips: 
+                 st.markdown(f"-{tip}")             else: 
+                            st.success(" You're well aligned with the job description!") 
+   #Log  evaluation            
+ log_entry = pd.DataFrame([{ 
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+                "match_score": score, 
+                "missing_keywords": ", ".join(suggestions) 
+            }]) 
+            log_file = "evaluation_log.csv"             
+           log_entry.to_csv(log_file, mode="a", header=not os.path.exists(log_file), index=False) 
+ \newpage
+\section{REFERENCES } 
+
+\begin{enumerate}
+    \item M. Lee and Y. Chen, "Job Matching with Deep Learning," IEEE Access, 2022.
+    \item Y. Sharma, A. Srivastava, and S. Arora, "Resume Ranking System Using Natural Language Processing," IRJET, 2021.
+    \item V. Patel and S. Deshmukh, "Machine Learning Based Resume Filtering," JETIR, 2021.
+    \item P. Raj and K. Thomas, "Intelligent Resume Analyzer Using Text Similarity," IJIRCCE, 2020.
+    \item D. Reddy and A. Mehta, "Candidate Selection System using NLP," IJSER, 2020.
+    \item J. Wang and K. Singh, "ResumeParser: Information Extraction from Unstructured Resumes," ACM Digital Library, 2019.
+    \item T. Ahmed and S. Roy, "Named Entity Recognition for Resume Screening," Elsevier, 2019.
+    \item N. Dey, S. Samanta, and M. Ashour, "Text Mining Approaches for Resume Classification," Springer, 2018.
+    \item H. Kumar and A. Banerjee, "Semantic-Based Resume Scanning," IJCSMC, 2017.
+    \item Gupta and R. Singh, "A Rule-Based System for Resume Classification," International Journal of Computer Applications, 2016.
+    
+\end{enumerate}
+\end{document}

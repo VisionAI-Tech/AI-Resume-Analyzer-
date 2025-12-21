@@ -1,0 +1,6 @@
+@st.cache_resource
+def load_keyword_categories():
+    with open("/mnt/data/keywords.json", "r") as f:
+        return json.load(f)
+
+keyword_categories = load_keyword_categories()

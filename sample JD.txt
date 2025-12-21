@@ -1,0 +1,15 @@
+We are looking for a skilled and detail-oriented Data Analyst to join our analytics team.
+
+Responsibilities:
+- Analyze large datasets to identify trends, patterns, and insights
+- Develop and maintain dashboards and reports using tools like Power BI or Tableau
+- Write complex SQL queries to extract data
+- Collaborate with business teams to gather requirements and present findings
+
+Requirements:
+- Proven experience as a Data Analyst or Business Analyst
+- Strong proficiency in SQL, Excel, and Python
+- Experience with data visualization tools (Power BI, Tableau, or similar)
+- Solid understanding of statistics and data modeling
+- Excellent problem-solving and communication skills
+- Bachelor's degree in Statistics, Mathematics, Computer Science, or related field

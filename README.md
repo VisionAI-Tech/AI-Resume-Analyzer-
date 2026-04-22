@@ -56,5 +56,8 @@ Pandas & NumPy – Data handling
 👩‍💻 Author
 -
 Janhavi Lakeri
-
+Shreya Ghadge 
+Samruddhi Shedage 
+Snehal Pawar
+Shubham Palakhe 
 
